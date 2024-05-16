@@ -44,7 +44,7 @@ app.post('/addCar', (req, res) => {
             brand: brand,
             model: model,
             year: year,
-			details: details
+	    details: details
         });
     });
 });
