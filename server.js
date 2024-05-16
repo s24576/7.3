@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
@@ -11,7 +10,7 @@ app.use(bodyParser.json());
 const db = new sqlite3.Database('cars.db');
 
 db.serialize(() => {
-    db.run("CREATE TABLE IF NOT EXISTS cars (id INTEGER PRIMARY KEY, brand TEXT NOT NULL, model TEXT NOT NULL, year INTEGER NOT NULL)");
+    db.run("CREATE TABLE IF NOT EXISTS cars (id INTEGER PRIMARY KEY, brand TEXT NOT NULL, model TEXT NOT NULL, year INTEGER NOT NULL, details TEXT NOT NULL)");
 });
 
 app.get('/cars', (req, res) => {
@@ -32,8 +31,8 @@ app.get('/cars', (req, res) => {
 });
 
 app.post('/addCar', (req, res) => {
-    const { brand, model, year } = req.body;
-    const sql = "INSERT INTO cars (brand, model, year) VALUES (?, ?, ?)";
+    const { brand, model, year, details } = req.body;
+    const sql = "INSERT INTO cars (brand, model, year, details) VALUES (?, ?, ?, ?)";
     const params = [brand, model, year];
     db.run(sql, params, function (err) {
         if (err) {
@@ -44,7 +43,8 @@ app.post('/addCar', (req, res) => {
             id: this.lastID,
             brand: brand,
             model: model,
-            year: year
+            year: year,
+			details: details
         });
     });
 });
